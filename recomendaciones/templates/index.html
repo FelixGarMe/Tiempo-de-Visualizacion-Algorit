@@ -92,7 +92,7 @@
 <div class="video-container">
     {% for video in videos %}
         <div class="video-item">
-            <img src="{{ video.thumbnail }}" class="video-thumbnail" onclick="openVideoModal('{{ video.id }}', '{{ video.youtube_id }}')" alt="{{ video.title }}">
+            <img src="{{ video.thumbnail }}" class="video-thumbnail" onclick="openVideoModal('{{ video.id }}', '{{ video.youtube_id }}', '{{video.genre}}')" alt="{{ video.title }}">
             <p>{{ video.title }} <br> <small>{{ video.genre }}</small></p>
         </div>
     {% endfor %}
@@ -115,10 +115,12 @@
     let totalTime = 60;
     let progressBar;
     let interval;
+    let genre;
 
-    function openVideoModal(id, youtube_id) {
+    function openVideoModal(id, youtube_id, videoGenre) {
         videoId = id;
         watchStartTime = Date.now();
+        genre = videoGenre;
         var videoUrl = 'https://www.youtube.com/embed/' + youtube_id + '?autoplay=1';
         document.getElementById('videoPlayer').src = videoUrl;
         document.getElementById('videoModal').style.display = "block";
@@ -147,7 +149,8 @@
             body: JSON.stringify({
                 video_id: videoId,
                 watch_time: watchTime,
-                total_time: totalTime
+                total_time: totalTime,
+                genre: genre
             })
         }).then(response => response.json())
           .then(data => console.log(data));
