@@ -47,7 +47,7 @@ namespace Worker
         private static bool ConexionPostgreSQL()
         {
             // establecer ruta de conexion con PostgreSQL
-            var conexion = "Host=localhost;Username=postgres;Password=password;Database=recomendaciones_videos";
+            var conexion = "Host=mi_postgres_container;Username=postgres;Password=password;Database=recomendaciones_libros";
             Console.WriteLine($"Conexion con Postgre: {conexion}");
 
             using (var conn = new NpgsqlConnection(conexion))
@@ -70,7 +70,7 @@ namespace Worker
 
         private static ConnectionMultiplexer AbrirConexionRedis()
         {
-            var conexion = ConfigurationOptions.Parse("localhost:6379");
+            var conexion = ConfigurationOptions.Parse("my-redis-container");
             conexion.ConnectTimeout = 5000;
 
             while (true)

@@ -90,12 +90,14 @@
 
 <h1>Menu de Videos</h1>
 <div class="video-container">
-    {% for video in videos %}
-        <div class="video-item">
-            <img src="{{ video.thumbnail }}" class="video-thumbnail" onclick="openVideoModal('{{ video.id }}', '{{ video.youtube_id }}', '{{video.genre}}')" alt="{{ video.title }}">
-            <p>{{ video.title }} <br> <small>{{ video.genre }}</small></p>
-        </div>
-    {% endfor %}
+    <div class="video-item">
+        <img src="{{ video.thumbnail }}" class="video-thumbnail" onclick="openVideoModal('{{ video.id }}', '{{ video.youtube_id }}', '{{video.genre}}')" alt="{{ video.title }}">
+        <p>{{ video.title }} <br> <small>{{ video.genre }}</small></p>
+</div>
+
+<div id="recommendations" style="display: none;">
+    <h2>Recomendaciones:</h2>
+    <div id="recommendationsList"></div>
 </div>
 
 <div id="videoModal" class="video-modal">
@@ -153,7 +155,24 @@
                 genre: genre
             })
         }).then(response => response.json())
-          .then(data => console.log(data));
+        .then(data => console.log(data));
+    }
+
+
+    function getRecommendations(videoId) {
+        fetch(`/get_recommendations/${videoId}`)
+            .then(response => response.json())
+            .then(recommendations => {
+                console.log('Recommendations:', recommendations);
+                let recommendationsList = document.getElementById('recommendationsList');
+                recommendationsList.innerHTML = '';
+                recommendations.forEach(recommendation => {
+                    let recommendationItem = document.createElement('div');
+                    recommendationItem.innerText = recommendation.title;
+                    recommendationsList.appendChild(recommendationItem);
+                });
+                document.getElementById('recommendations').style.display = 'block';
+            });
     }
 
     function updateProgressBar() {
